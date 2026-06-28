@@ -2,6 +2,20 @@
 
 Own your data points; Create and manage surveys
 
+## Demo
+
+### Home page
+
+![Home page](src/data/Demos/HomePage.png)
+
+### Create survey
+
+![Create survey](src/data/Demos/createSurvey.png)
+
+### Admin view
+
+![Admin view](src/data/Demos/admin.png)
+
 ## Setup
 
 1. Create a Supabase project.
