@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { downloadResponsesCsv } from '../utils/csv.js';
 import { getOwnedSurveyById, getResponsesForSurvey } from '../utils/storage.js';
+import { normalizeSections } from '../utils/surveyStructure.js';
 
 export default function Responses() {
   const { surveyId } = useParams();
@@ -80,11 +81,21 @@ export default function Responses() {
                 <td>Submitted</td>
                 <td>{new Date(response.submittedAt).toLocaleString()}</td>
               </tr>
-              {survey.questions.map((question) => (
-                <tr key={question.id}>
-                  <td>{question.text}</td>
-                  <td>{response.answers[question.id] || '(No answer)'}</td>
-                </tr>
+              {normalizeSections(survey).map((section) => (
+                <Fragment key={section.id}>
+                  <tr>
+                    <th colSpan="2">{section.title}</th>
+                  </tr>
+                  {section.questions.map((question) => (
+                    <tr key={question.id}>
+                      <td>
+                        {question.text}
+                        {question.active === false && ' (archived)'}
+                      </td>
+                      <td>{response.answers[question.id] || '(No answer)'}</td>
+                    </tr>
+                  ))}
+                </Fragment>
               ))}
             </tbody>
           </table>

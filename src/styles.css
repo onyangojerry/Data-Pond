@@ -1,18 +1,84 @@
 body {
+  --page-bg: #bfbfbf;
+  --text: #000;
+  --panel-bg: #e6e6e6;
+  --header-bg: #000080;
+  --header-text: #fff;
+  --nav-bg: #d0d0d0;
+  --field-bg: #fff;
+  --field-text: #000;
+  --button-bg: #d6d6d6;
+  --table-bg: #fff;
+  --table-head-bg: #c0c0c0;
+  --subpanel-bg: #f2f2f2;
+  --border: #777;
+  --strong-border: #000;
+  --link: #0000ee;
+  --visited: #551a8b;
+  --notice-bg: #ffffcc;
+  --error-bg: #ffdddd;
+  --hr-light: #fff;
+}
+
+body[data-theme='dark'] {
+  --page-bg: #1c1c1c;
+  --text: #e6e6e6;
+  --panel-bg: #2a2a2a;
+  --header-bg: #111;
+  --header-text: #f5f5f5;
+  --nav-bg: #333;
+  --field-bg: #101010;
+  --field-text: #f5f5f5;
+  --button-bg: #444;
+  --table-bg: #151515;
+  --table-head-bg: #383838;
+  --subpanel-bg: #242424;
+  --border: #777;
+  --strong-border: #aaa;
+  --link: #8ab4ff;
+  --visited: #c58cff;
+  --notice-bg: #37301a;
+  --error-bg: #3d1f1f;
+  --hr-light: #444;
+}
+
+body[data-theme='terminal'] {
+  --page-bg: #001800;
+  --text: #39ff14;
+  --panel-bg: #002400;
+  --header-bg: #003300;
+  --header-text: #b7ffb0;
+  --nav-bg: #001f00;
+  --field-bg: #000;
+  --field-text: #39ff14;
+  --button-bg: #003b00;
+  --table-bg: #000;
+  --table-head-bg: #003300;
+  --subpanel-bg: #001f00;
+  --border: #1fbf1f;
+  --strong-border: #39ff14;
+  --link: #7dff68;
+  --visited: #b7ffb0;
+  --notice-bg: #002900;
+  --error-bg: #240000;
+  --hr-light: #0d5c0d;
+}
+
+body {
   margin: 0;
-  background: #bfbfbf;
-  color: #000;
+  background: var(--page-bg);
+  color: var(--text);
   font-family: Arial, "Times New Roman", serif;
   font-size: 13px;
 }
 
 a {
-  color: #0000ee;
+  color: var(--link);
   text-decoration: underline;
 }
 
 a:visited {
-  color: #551a8b;
+  color: var(--visited);
 }
 
 h1,
@@ -36,8 +102,8 @@ h3 {
 
 hr {
   border: 0;
-  border-top: 1px solid #777;
-  border-bottom: 1px solid #fff;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--hr-light);
 }
 
 button,
@@ -55,16 +121,16 @@ textarea {
   width: 100%;
   max-width: 620px;
   margin: 3px 0 9px;
-  border: 2px inset #ddd;
-  background: #fff;
-  color: #000;
+  border: 2px inset var(--border);
+  background: var(--field-bg);
+  color: var(--field-text);
   padding: 3px;
 }
 
 button {
-  border: 2px outset #ddd;
-  background: #d6d6d6;
-  color: #000;
+  border: 2px outset var(--border);
+  background: var(--button-bg);
+  color: var(--text);
   padding: 2px 8px;
   cursor: pointer;
 }
@@ -87,14 +153,14 @@ label {
 .main-table {
   width: 100%;
   border-collapse: collapse;
-  border: 2px solid #000;
-  background: #e6e6e6;
+  border: 2px solid var(--strong-border);
+  background: var(--panel-bg);
 }
 
 .site-header {
-  background: #000080;
-  color: #fff;
-  border-bottom: 2px solid #000;
+  background: var(--header-bg);
+  color: var(--header-text);
+  border-bottom: 2px solid var(--strong-border);
   padding: 8px 10px;
 }
 
@@ -103,8 +169,8 @@ label {
 }
 
 .nav-bar {
-  background: #d0d0d0;
-  border-bottom: 1px solid #777;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
   padding: 5px 10px;
 }
 
@@ -140,14 +206,14 @@ label {
   width: 100%;
   border-collapse: collapse;
   margin: 8px 0 14px;
-  background: #fff;
+  background: var(--table-bg);
 }
 
 .data-table th,
 .data-table td,
 .response-table th,
 .response-table td {
-  border: 1px solid #777;
+  border: 1px solid var(--border);
   padding: 5px;
   text-align: left;
   vertical-align: top;
@@ -155,28 +221,30 @@ label {
 
 .data-table th,
 .response-table th {
-  background: #c0c0c0;
+  background: var(--table-head-bg);
 }
 
 .question-editor,
 .survey-question,
-.bot-box {
-  border: 2px groove #ddd;
+.bot-box,
+.section-editor,
+.survey-section {
+  border: 2px groove var(--border);
   margin: 10px 0;
   padding: 8px;
-  background: #f2f2f2;
+  background: var(--subpanel-bg);
 }
 
 .bot-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 8px;
-  background: #fff;
-  border: 1px solid #777;
+  background: var(--table-bg);
+  border: 1px solid var(--border);
 }
 
 .bot-table td {
-  border: 1px solid #777;
+  border: 1px solid var(--border);
   padding: 6px;
   vertical-align: top;
 }
@@ -186,7 +254,7 @@ label {
   text-align: center;
   font-family: "Courier New", monospace;
   font-size: 16px;
-  background: #d0d0d0;
+  background: var(--nav-bg);
 }
 
 .bot-message {
@@ -194,8 +262,8 @@ label {
 }
 
 .bot-chat-box {
-  border: 1px solid #777;
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--table-bg);
   padding: 6px;
   margin: 8px 0;
 }
@@ -203,14 +271,14 @@ label {
 .bot-chat-log {
   height: 150px;
   overflow: auto;
-  border: 2px inset #ddd;
-  background: #fff;
+  border: 2px inset var(--border);
+  background: var(--field-bg);
   padding: 5px;
   margin: 5px 0 8px;
 }
 
 .bot-chat-line {
-  border-bottom: 1px dotted #aaa;
+  border-bottom: 1px dotted var(--border);
   padding: 3px 0;
   white-space: pre-wrap;
 }
@@ -220,8 +288,8 @@ label {
 }
 
 .options-box {
-  border: 1px solid #777;
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--table-bg);
   padding: 6px;
   margin: 6px 0;
 }
@@ -253,24 +321,30 @@ label {
 
 .error-box,
 .notice-box {
-  border: 1px solid #000;
+  border: 1px solid var(--strong-border);
   padding: 7px;
   margin: 8px 0;
-  background: #ffffcc;
+  background: var(--notice-bg);
 }
 
 .error-box {
-  background: #ffdddd;
+  background: var(--error-bg);
 }
 
 .link-button {
   border: 0;
   background: transparent;
-  color: #0000ee;
+  color: var(--link);
   text-decoration: underline;
   padding: 0;
   font: inherit;
   cursor: pointer;
+}
+
+.theme-select {
+  width: auto;
+  min-width: 120px;
+  margin: 0;
 }
 
 @media (max-width: 700px) {

@@ -1,3 +1,5 @@
+import { normalizeSections } from './surveyStructure.js';
+
 function escapeCsvCell(value) {
   const text = value === null || value === undefined ? '' : String(value);
   return `"${text.replaceAll('"', '""')}"`;
@@ -13,11 +15,17 @@ function makeFileName(title) {
 }
 
 export function downloadResponsesCsv(survey, responses) {
-  const headers = ['Response ID', 'Submitted At', ...survey.questions.map((question) => question.text)];
+  const questions = normalizeSections(survey).flatMap((section) =>
+    section.questions.map((question) => ({
+      ...question,
+      csvLabel: `${section.title}: ${question.text}${question.active === false ? ' (archived)' : ''}`
+    }))
+  );
+  const headers = ['Response ID', 'Submitted At', ...questions.map((question) => question.csvLabel)];
   const rows = responses.map((response) => [
     response.id,
     response.submittedAt,
-    ...survey.questions.map((question) => response.answers[question.id] || '')
+    ...questions.map((question) => response.answers[question.id] || '')
   ]);
 
   const csv = [headers, ...rows].map((row) => row.map(escapeCsvCell).join(',')).join('\n');

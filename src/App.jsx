@@ -23,7 +23,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/edit/:surveyId"
+          element={
+            <ProtectedRoute>
+              <CreateSurvey />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/survey/:surveyId" element={<TakeSurvey />} />
+        <Route path="/s/:surveySlug" element={<TakeSurvey />} />
         <Route path="/confirmation" element={<Confirmation />} />
         <Route
           path="/admin"

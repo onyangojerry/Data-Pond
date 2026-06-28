@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { upsertProfile } from '../utils/profiles.js';
 import { supabase } from '../utils/supabaseClient.js';
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState('sign-in');
   const [message, setMessage] = useState('');
@@ -29,7 +31,14 @@ export default function Login() {
     const credentials = { email: email.trim(), password };
     const result =
       mode === 'sign-up'
-        ? await supabase.auth.signUp(credentials)
+        ? await supabase.auth.signUp({
+            ...credentials,
+            options: {
+              data: {
+                username: username.trim()
+              }
+            }
+          })
         : await supabase.auth.signInWithPassword(credentials);
 
     if (result.error) {
@@ -42,6 +51,14 @@ export default function Login() {
       setMessage('Account created. Check your email to confirm your address, then sign in.');
       setSubmitting(false);
       return;
+    }
+
+    if (mode === 'sign-up' && result.data.user) {
+      try {
+        await upsertProfile(result.data.user.id, username);
+      } catch (profileError) {
+        setMessage(`Account created, but username could not be saved: ${profileError.message}`);
+      }
     }
 
     navigate(returnPath, { replace: true });
@@ -63,6 +80,19 @@ export default function Login() {
           Email
           <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
         </label>
+
+        {mode === 'sign-up' && (
+          <label>
+            Username
+            <input
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              minLength="2"
+              required
+            />
+          </label>
+        )}
 
         <label>
           Password

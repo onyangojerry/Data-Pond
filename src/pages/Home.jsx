@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getSurveyPath } from '../utils/shareLinks.js';
 import { getPublishedSurveys } from '../utils/storage.js';
+import { getActiveQuestionCount } from '../utils/surveyStructure.js';
 
 export default function Home() {
   const [surveys, setSurveys] = useState([]);
@@ -50,9 +52,9 @@ export default function Home() {
               <tr key={survey.id}>
                 <td>{survey.title}</td>
                 <td>{survey.description}</td>
-                <td>{survey.questions.length}</td>
+                <td>{getActiveQuestionCount(survey)}</td>
                 <td>
-                  <Link to={`/survey/${survey.id}`}>Take Survey</Link>
+                  <Link to={getSurveyPath(survey)}>Take Survey</Link>
                 </td>
               </tr>
             ))}

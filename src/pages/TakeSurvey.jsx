@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import SurveyQuestion from '../components/SurveyQuestion.jsx';
-import { addResponse, getSurveyById, makeId } from '../utils/storage.js';
+import { addResponse, getSurveyById, getSurveyBySlug, makeId } from '../utils/storage.js';
+import { getActiveSections } from '../utils/surveyStructure.js';
 
 export default function TakeSurvey() {
-  const { surveyId } = useParams();
+  const { surveyId, surveySlug } = useParams();
   const navigate = useNavigate();
   const [survey, setSurvey] = useState(null);
   const [missing, setMissing] = useState(false);
@@ -16,7 +17,7 @@ export default function TakeSurvey() {
   useEffect(() => {
     async function loadSurvey() {
       try {
-        const foundSurvey = await getSurveyById(surveyId);
+        const foundSurvey = surveySlug ? await getSurveyBySlug(surveySlug) : await getSurveyById(surveyId);
         if (!foundSurvey || foundSurvey.status !== 'published') {
           setMissing(true);
           return;
@@ -30,7 +31,7 @@ export default function TakeSurvey() {
     }
 
     loadSurvey();
-  }, [surveyId]);
+  }, [surveyId, surveySlug]);
 
   function updateAnswer(questionId, answer) {
     setAnswers({ ...answers, [questionId]: answer });
@@ -38,7 +39,8 @@ export default function TakeSurvey() {
 
   async function submitSurvey(event) {
     event.preventDefault();
-    const unanswered = survey.questions.find((question) => !String(answers[question.id] || '').trim());
+    const activeQuestions = getActiveSections(survey).flatMap((section) => section.questions);
+    const unanswered = activeQuestions.find((question) => !String(answers[question.id] || '').trim());
 
     if (unanswered) {
       setError('Please answer every question before submitting.');
@@ -112,13 +114,19 @@ export default function TakeSurvey() {
       {error && <div className="error-box">{error}</div>}
 
       <form onSubmit={submitSurvey}>
-        {survey.questions.map((question) => (
-          <SurveyQuestion
-            key={question.id}
-            question={question}
-            value={answers[question.id] || ''}
-            onAnswer={updateAnswer}
-          />
+        {getActiveSections(survey).map((section) => (
+          <fieldset className="survey-section" key={section.id}>
+            <legend>{section.title}</legend>
+            {section.description && <p>{section.description}</p>}
+            {section.questions.map((question) => (
+              <SurveyQuestion
+                key={question.id}
+                question={question}
+                value={answers[question.id] || ''}
+                onAnswer={updateAnswer}
+              />
+            ))}
+          </fieldset>
         ))}
 
         <p>

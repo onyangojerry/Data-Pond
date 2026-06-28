@@ -6,7 +6,7 @@ const QUESTION_TYPES = [
   { value: 'rating', label: 'Rating from 1 to 5' }
 ];
 
-export default function QuestionEditor({ question, index, onChange, onDelete }) {
+export default function QuestionEditor({ question, index, onChange, onDelete, deleteLabel = 'Delete Question' }) {
   function updateQuestion(field, value) {
     const nextQuestion = { ...question, [field]: value };
 
@@ -85,7 +85,7 @@ export default function QuestionEditor({ question, index, onChange, onDelete }) 
       )}
 
       <button type="button" onClick={onDelete}>
-        Delete Question
+        {deleteLabel}
       </button>
     </fieldset>
   );

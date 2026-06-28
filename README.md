@@ -1,8 +1,6 @@
-# Survey-O-Matic 2002
+# Data Pond
 
-React + Vite survey app backed by Supabase.
-
-The survey question helper uses a free browser-side Hugging Face Transformers.js model. It downloads the model on first use and runs in the publisher's browser; no paid AI API key is required.
+Own your data points; Create and manage surveys
 
 ## Setup
 
@@ -45,3 +43,7 @@ VITE_SUPABASE_ANON_KEY
 ## Security note
 
 Admin pages require Supabase Auth. Published surveys can be viewed and answered by anyone with the public survey link.
+
+## Short links
+
+Published surveys use short first-party links like `/s/customer-feedback-a1b2c3`. Run the latest `supabase/schema.sql` so the `surveys.slug` column and unique index exist before publishing surveys.

@@ -1,4 +1,5 @@
 import { missingSupabaseConfig, supabase } from './supabaseClient.js';
+import { getAllQuestions, normalizeSections } from './surveyStructure.js';
 
 function requireSupabase() {
   if (missingSupabaseConfig) {
@@ -13,8 +14,10 @@ function toSurvey(row) {
     title: row.title,
     description: row.description || '',
     status: row.status,
+    slug: row.slug || '',
     createdAt: row.created_at,
-    questions: row.questions || []
+    sections: normalizeSections(row),
+    questions: Array.isArray(row.questions) && row.questions.length > 0 ? row.questions : getAllQuestions(row)
   };
 }
 
@@ -114,13 +117,49 @@ export async function addSurvey(survey) {
     title: survey.title,
     description: survey.description,
     status: survey.status,
+    slug: survey.slug,
     created_at: survey.createdAt,
+    sections: survey.sections,
     questions: survey.questions
   });
 
   if (error) {
     throw new Error(getErrorMessage(error));
   }
+}
+
+export async function updateSurvey(survey) {
+  requireSupabase();
+  const user = await getCurrentUser();
+  const { error } = await supabase
+    .from('surveys')
+    .update({
+      title: survey.title,
+      description: survey.description,
+      status: survey.status,
+      slug: survey.slug,
+      sections: survey.sections,
+      questions: survey.questions
+    })
+    .eq('id', survey.id)
+    .eq('owner_id', user.id)
+    .select('id')
+    .single();
+
+  if (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
+export async function getSurveyBySlug(slug) {
+  requireSupabase();
+  const { data, error } = await supabase.from('surveys').select('*').eq('slug', slug).maybeSingle();
+
+  if (error) {
+    throw new Error(getErrorMessage(error));
+  }
+
+  return data ? toSurvey(data) : null;
 }
 
 export async function deleteSurvey(id) {

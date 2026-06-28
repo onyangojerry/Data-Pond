@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { getProfile } from './profiles.js';
 import { supabase } from './supabaseClient.js';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,7 +44,24 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  return <AuthContext.Provider value={{ session, user: session?.user || null, loading }}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    async function loadProfile() {
+      if (!session?.user) {
+        setProfile(null);
+        return;
+      }
+
+      setProfile(await getProfile(session.user.id));
+    }
+
+    loadProfile();
+  }, [session]);
+
+  return (
+    <AuthContext.Provider value={{ session, user: session?.user || null, profile, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
