@@ -21,7 +21,9 @@ Own your data points; Create and manage surveys
 1. Create a Supabase project.
 2. Open the Supabase SQL editor and run `supabase/schema.sql`.
 3. In Supabase, go to Authentication > Providers and make sure Email is enabled.
-4. In Authentication > URL Configuration, add your local and production site URLs.
+4. In Authentication > URL Configuration, set the Site URL to your deployed app URL and add both local and production redirect URLs.
+   - Local redirect URL: `http://localhost:5173/login`
+   - Production redirect URL: `https://your-site-name.netlify.app/login`
 5. Copy `.env.example` to `.env`.
 6. Fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
 7. Install and run:

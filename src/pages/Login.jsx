@@ -15,6 +15,7 @@ export default function Login() {
   const [submitting, setSubmitting] = useState(false);
 
   const returnPath = location.state?.from?.pathname || '/admin';
+  const authRedirectUrl = `${window.location.origin}/login`;
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -34,6 +35,7 @@ export default function Login() {
         ? await supabase.auth.signUp({
             ...credentials,
             options: {
+              emailRedirectTo: authRedirectUrl,
               data: {
                 username: username.trim()
               }
